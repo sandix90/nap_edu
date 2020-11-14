@@ -1,0 +1,3 @@
+SQLAlchemy==1.3.20
+sanic==20.9.1
+alembic==1.4.3
