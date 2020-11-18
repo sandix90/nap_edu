@@ -17,4 +17,4 @@ def init_sqlite_db(context: Context, config: ApplicationConfig):
     engine.execute('pragma foreign_keys=on')
     database = DataBase(engine)
     # database.check_connection()
-    context.set("db", database)
+    context.set("database", database)

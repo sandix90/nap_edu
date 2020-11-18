@@ -4,6 +4,7 @@ from sanic.request import Request
 from sanic.response import BaseHTTPResponse, json as JsonResponse
 
 from configs.config import ApplicationConfig
+from context import Context
 
 
 def import_body_json(request: Request) -> dict:
@@ -28,10 +29,11 @@ class SanicEndpoint:
     async def __call__(self, *args, **kwargs):
         return await self.handle(*args, **kwargs)
 
-    def __init__(self, config: ApplicationConfig, uri, methods, *args, **kwargs):
+    def __init__(self, config: ApplicationConfig, context: Context, uri, methods, *args, **kwargs):
         self.config = config
         self.uri = uri
         self.methods = methods
+        self.context = context
         self.__name__ = self.__class__.__name__
 
     async def handle(self, request: Request, *args, **kwargs):
@@ -97,4 +99,3 @@ class SanicEndpoint:
         }
 
         return JsonResponse(data, status=code)
-
