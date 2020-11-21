@@ -8,4 +8,4 @@ class RequestGetEmployeeDtoSchema(Schema):
 
 
 class RequestGetEmployeeDto(RequestDto, RequestGetEmployeeDtoSchema):
-    __schema__: Schema = RequestGetEmployeeDtoSchema
+    __schema__ = RequestGetEmployeeDtoSchema

@@ -20,7 +20,7 @@ class RequestDto:
         try:
 
             errors = self.__schema__(unknown=EXCLUDE).validate(data=data)
-            if errors is not None:
+            if len(errors) > 0:
                 raise APIValidateException(errors)
 
             self._import(data)
@@ -28,7 +28,7 @@ class RequestDto:
             raise APIValidateException(errors)
 
     def _import(self, data: dict):
-        for name, field in self.__schema__.declared_fields.items():
+        for name, field in data.items():
             self.set(name, data[name])
 
     def set(self, key, value):
@@ -36,11 +36,22 @@ class RequestDto:
 
 
 class ResponseDto:
-    __schema__: Schema = None
-    data: object = None
+    __schema__ = Schema
 
-    def __init__(self, data: object):
-        self.__schema__.load(data)
+    def __init__(self, obj: object):
+        properties = [pr for pr in dir(obj) if not pr.startswith('_')]
+
+        for property in properties:
+            if property[:1] == '_':
+                continue
+
+            self._import_field(obj, property)
+
+    def _import_field(self, source_obj: object, name: str):
+        value = source_obj.__getattribute__(name)
+
+        if not callable(value):
+            setattr(self, name, value)
 
     def dump(self) -> dict:
-        return self.__schema__.dump(self).data
+        return self.__schema__().dump(self)

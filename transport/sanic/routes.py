@@ -13,7 +13,8 @@ def get_routes(config: ApplicationConfig, context: Context) -> List[SanicEndpoin
     ]
 
     return [
-        endpoints.HealthEndpoint(*params, "/health", ["GET"]),
-        endpoints.GetEmployeeEndpoint(*params, "/employee", {"GET"}),
+        endpoints.HealthEndpoint(config, context, "/health", ["GET"]),
+        endpoints.GetEmployeeEndpoint(config, context, "/employee/<eid:int>", {"GET"}),
+        endpoints.CreateEmployeeEndpoint(config, context, "/employee", {"POST"}),
 
     ]

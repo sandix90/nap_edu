@@ -40,6 +40,7 @@ class SanicEndpoint:
         body = {}
 
         body.update(import_body_json(request))
+        body.update(self.import_body_match_info(request))
         # body['auth'] = auth
 
         return await self._method(request, body, *args, **kwargs)
@@ -99,3 +100,10 @@ class SanicEndpoint:
         }
 
         return JsonResponse(data, status=code)
+
+    @staticmethod
+    def import_body_match_info(request: Request) -> dict:
+        if request.match_info is not None:
+            return dict(request.match_info)
+
+        return {}
